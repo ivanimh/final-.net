@@ -1,0 +1,41 @@
+@model Armada
+@{ var isEdit = Model.Id > 0; }
+
+<div class="narrow">
+    <div class="page-head"><h1>@ViewData["Title"]</h1></div>
+
+    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="KodeArmada" class="form-label"></label>
+            <input asp-for="KodeArmada" class="form-control" placeholder="SHT-05" />
+            <span asp-validation-for="KodeArmada" class="text-danger small"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="NamaArmada" class="form-label"></label>
+            <input asp-for="NamaArmada" class="form-control" placeholder="Toyota HiAce Premio" />
+            <span asp-validation-for="NamaArmada" class="text-danger small"></span>
+        </div>
+        <div class="row">
+            <div class="col-sm-7 mb-3">
+                <label asp-for="PlatNomor" class="form-label"></label>
+                <input asp-for="PlatNomor" class="form-control" placeholder="D 1234 ABC" />
+                <span asp-validation-for="PlatNomor" class="text-danger small"></span>
+            </div>
+            <div class="col-sm-5 mb-3">
+                <label asp-for="Kapasitas" class="form-label"></label>
+                <input asp-for="Kapasitas" class="form-control" />
+                <span asp-validation-for="Kapasitas" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-2">
+            <button type="submit" class="btn btn-primary">Simpan</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Batal</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

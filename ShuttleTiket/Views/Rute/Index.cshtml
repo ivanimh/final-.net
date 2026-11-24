@@ -1,0 +1,35 @@
+@model List<Rute>
+@{ ViewData["Title"] = "Rute"; }
+
+<div class="page-head">
+    <h1>Rute</h1>
+    <a asp-action="Create" class="btn btn-primary">Tambah rute</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr><th>Rute</th><th class="num">Harga per kursi</th><th class="num">Estimasi</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.KotaAsal &rarr; @r.KotaTujuan</td>
+                    <td class="num">@Format.Rupiah(r.Harga)</td>
+                    <td class="num">@(r.EstimasiMenit / 60) j @(r.EstimasiMenit % 60) m</td>
+                    <td class="actions">
+                        <a asp-action="Edit" asp-route-id="@r.Id">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@r.Id" method="post" onsubmit="return confirm('Hapus rute ini?')">
+                            <button class="link-btn link-danger">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="4" class="muted py-4">Belum ada data rute.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

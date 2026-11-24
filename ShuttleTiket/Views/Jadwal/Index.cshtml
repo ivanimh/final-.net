@@ -1,0 +1,56 @@
+@model List<VwJadwalShuttle>
+@{ ViewData["Title"] = "Jadwal"; }
+
+<div class="page-head">
+    <div>
+        <h1>Jadwal keberangkatan</h1>
+        <p>@(ViewBag.Tanggal == null ? "Menampilkan jadwal mulai hari ini." : "Difilter per tanggal.")</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <form method="get" class="d-flex gap-2">
+            <input type="date" name="tanggal" value="@ViewBag.Tanggal" class="form-control form-control-sm" aria-label="Tanggal" />
+            <button class="btn btn-sm btn-outline-secondary">Filter</button>
+            @if (ViewBag.Tanggal != null)
+            {
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">Reset</a>
+            }
+        </form>
+        <a asp-action="Create" class="btn btn-sm btn-primary">Tambah jadwal</a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Tanggal</th><th>Jam</th><th>Rute</th><th>Armada</th>
+                <th class="num">Harga</th><th class="num">Terisi</th><th class="num">Sisa</th><th>Status</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var j in Model)
+            {
+                <tr>
+                    <td class="text-nowrap">@Format.TanggalPendek(j.Tanggal)</td>
+                    <td>@Format.Jam(j.JamBerangkat)</td>
+                    <td class="text-nowrap">@j.KotaAsal &rarr; @j.KotaTujuan</td>
+                    <td>@j.NamaArmada<span class="sub">@j.PlatNomor</span></td>
+                    <td class="num">@Format.Rupiah(j.Harga)</td>
+                    <td class="num">@j.KursiTerisi</td>
+                    <td class="num @(j.SisaKursi == 0 ? "status-BATAL" : "")">@j.SisaKursi</td>
+                    <td><span class="status status-@j.StatusJadwal">@j.StatusJadwal</span></td>
+                    <td class="actions">
+                        <a asp-action="Edit" asp-route-id="@j.JadwalId">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@j.JadwalId" method="post" onsubmit="return confirm('Hapus jadwal ini?')">
+                            <button class="link-btn link-danger">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="9" class="muted py-4">Tidak ada jadwal.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>
