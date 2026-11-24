@@ -1,0 +1,149 @@
+/* =====================================================================
+   FILE BERSAMA: gaya dasar ShuttleKu.
+   Prinsip: sedikit warna, tanpa gradien/bayangan, tabel & teks yang jelas.
+   ===================================================================== */
+:root {
+  --ink: #17191c;       /* teks utama & tombol utama */
+  --muted: #6a7078;     /* teks sekunder */
+  --line: #e2e4e7;      /* garis & border */
+  --soft: #f5f6f7;      /* latar panel */
+  --ok: #17733f;
+  --wait: #a35a00;
+  --bad: #b3261e;
+}
+
+html { font-size: 15px; position: relative; min-height: 100%; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  background: #fff;
+  margin-bottom: 64px;
+}
+
+a { color: var(--ink); }
+
+h1 { font-size: 1.5rem; font-weight: 600; margin-bottom: .25rem; }
+h2 { font-size: 1.05rem; font-weight: 600; margin: 1.5rem 0 .75rem; }
+
+.text-muted, .muted { color: var(--muted) !important; }
+
+/* ----- Header ----- */
+.site-header { border-bottom: 1px solid var(--line); }
+.site-header .navbar-brand { font-weight: 600; font-size: 1.05rem; }
+.site-header .nav-link { color: var(--muted); padding-left: .6rem !important; padding-right: .6rem !important; }
+.site-header .nav-link:hover,
+.site-header .nav-link.active { color: var(--ink); }
+.site-header .nav-link.active { text-decoration: underline; text-underline-offset: 6px; }
+.nav-label { color: var(--muted); font-size: .8rem; align-self: center; padding: 0 .4rem; }
+.site-header form { margin: 0; }
+.site-header button.nav-link { background: none; border: 0; }
+
+.site-footer {
+  position: absolute; bottom: 0; width: 100%;
+  border-top: 1px solid var(--line);
+  color: var(--muted); font-size: .85rem;
+  line-height: 48px;
+}
+
+/* ----- Judul halaman ----- */
+.page-head {
+  display: flex; flex-wrap: wrap; gap: .75rem 1rem;
+  justify-content: space-between; align-items: flex-end;
+  margin-bottom: 1.25rem;
+}
+.page-head p { margin: 0; color: var(--muted); }
+
+/* ----- Panel polos ----- */
+.panel { border: 1px solid var(--line); border-radius: 6px; padding: 1.25rem; }
+.panel-soft { background: var(--soft); border-color: transparent; }
+
+/* ----- Form & tombol ----- */
+.form-label { font-size: .9rem; font-weight: 500; margin-bottom: .3rem; }
+.form-control, .form-select { border-radius: 4px; border-color: #cdd1d6; }
+.form-control:focus, .form-select:focus { border-color: var(--ink); box-shadow: 0 0 0 2px rgba(23, 25, 28, .12); }
+.narrow { max-width: 520px; }
+
+.btn { border-radius: 4px; }
+.btn-primary {
+  --bs-btn-bg: var(--ink); --bs-btn-border-color: var(--ink);
+  --bs-btn-hover-bg: #000; --bs-btn-hover-border-color: #000;
+  --bs-btn-active-bg: #000; --bs-btn-active-border-color: #000;
+  --bs-btn-disabled-bg: #9aa0a6; --bs-btn-disabled-border-color: #9aa0a6;
+  --bs-btn-focus-shadow-rgb: 23, 25, 28;
+}
+.btn-outline-secondary { --bs-btn-color: var(--ink); --bs-btn-border-color: #cdd1d6; --bs-btn-hover-bg: var(--soft); --bs-btn-hover-color: var(--ink); --bs-btn-hover-border-color: #cdd1d6; }
+
+/* Tombol yang tampil seperti tautan (untuk aksi POST: hapus, batal) */
+.link-btn {
+  background: none; border: 0; padding: 0;
+  color: var(--ink); text-decoration: underline; text-underline-offset: 3px;
+  font: inherit; cursor: pointer;
+}
+.link-danger { color: var(--bad); }
+.actions { white-space: nowrap; text-align: right; }
+.actions > * { margin-left: .9rem; }
+.actions form { display: inline; }
+
+/* ----- Tabel ----- */
+.table { --bs-table-border-color: var(--line); margin-bottom: 0; }
+.table > thead th {
+  font-weight: 500; font-size: .85rem; color: var(--muted);
+  border-bottom-width: 1px; white-space: nowrap;
+}
+.table > tfoot td { font-weight: 600; border-top: 1px solid var(--ink); border-bottom: 0; }
+.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sub { display: block; color: var(--muted); font-size: .85rem; }
+
+/* ----- Status ----- */
+.status { font-weight: 500; font-size: .9rem; }
+.status-LUNAS, .status-AKTIF { color: var(--ok); }
+.status-MENUNGGU { color: var(--wait); }
+.status-BATAL { color: var(--bad); }
+
+/* ----- Daftar info (label : nilai) ----- */
+.info { display: grid; grid-template-columns: 150px 1fr; gap: .45rem 1rem; margin: 0; }
+.info dt { font-weight: 400; color: var(--muted); }
+.info dd { margin: 0; }
+@media (max-width: 575px) {
+  .info { grid-template-columns: 1fr; gap: 0; }
+  .info dd { margin-bottom: .6rem; }
+}
+
+.code { font-family: ui-monospace, Consolas, "Courier New", monospace; letter-spacing: .04em; }
+
+/* ----- Pilih kursi ----- */
+.kursi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 52px);
+  gap: .5rem;
+}
+.kursi-grid input[type=checkbox] { position: absolute; opacity: 0; pointer-events: none; }
+.kursi-grid label {
+  display: flex; align-items: center; justify-content: center;
+  height: 44px; border: 1px solid #b9bec5; border-radius: 4px;
+  cursor: pointer; user-select: none; font-variant-numeric: tabular-nums;
+}
+.kursi-grid label:hover { border-color: var(--ink); }
+.kursi-grid input:focus-visible + label { outline: 2px solid var(--ink); outline-offset: 2px; }
+.kursi-grid input:checked + label { background: var(--ink); border-color: var(--ink); color: #fff; }
+.kursi-grid input:disabled + label { background: var(--soft); border-color: var(--line); color: #b0b5bb; cursor: not-allowed; }
+
+.legend { display: flex; gap: 1rem; font-size: .85rem; color: var(--muted); margin-bottom: .75rem; }
+.legend span::before {
+  content: ""; display: inline-block; width: 12px; height: 12px;
+  border: 1px solid #b9bec5; border-radius: 2px; margin-right: .35rem; vertical-align: -1px;
+}
+.legend .l-pilih::before { background: var(--ink); border-color: var(--ink); }
+.legend .l-isi::before { background: var(--soft); border-color: var(--line); }
+
+/* ----- E-ticket ----- */
+.ticket { border: 1px solid var(--ink); border-radius: 6px; max-width: 640px; }
+.ticket-head { display: flex; justify-content: space-between; align-items: flex-start; padding: 1.25rem; border-bottom: 1px solid var(--line); }
+.ticket-body { padding: 1.25rem; }
+.ticket-route { font-size: 1.35rem; font-weight: 600; margin-bottom: 1rem; }
+
+@media print {
+  body { margin-bottom: 0; }
+  .site-header, .site-footer, .no-print { display: none !important; }
+}

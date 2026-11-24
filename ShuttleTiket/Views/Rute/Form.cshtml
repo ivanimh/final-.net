@@ -1,0 +1,43 @@
+@model Rute
+@{ var isEdit = Model.Id > 0; }
+
+<div class="narrow">
+    <div class="page-head"><h1>@ViewData["Title"]</h1></div>
+
+    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row">
+            <div class="col-sm-6 mb-3">
+                <label asp-for="KotaAsal" class="form-label"></label>
+                <input asp-for="KotaAsal" class="form-control" placeholder="Bandung" />
+                <span asp-validation-for="KotaAsal" class="text-danger small"></span>
+            </div>
+            <div class="col-sm-6 mb-3">
+                <label asp-for="KotaTujuan" class="form-label"></label>
+                <input asp-for="KotaTujuan" class="form-control" placeholder="Jakarta" />
+                <span asp-validation-for="KotaTujuan" class="text-danger small"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 mb-3">
+                <label asp-for="Harga" class="form-label"></label>
+                <input asp-for="Harga" type="number" step="1000" value="@Model.Harga.ToString("0")" class="form-control" />
+                <span asp-validation-for="Harga" class="text-danger small"></span>
+            </div>
+            <div class="col-sm-6 mb-3">
+                <label asp-for="EstimasiMenit" class="form-label"></label>
+                <input asp-for="EstimasiMenit" class="form-control" />
+                <span asp-validation-for="EstimasiMenit" class="text-danger small"></span>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-2">
+            <button type="submit" class="btn btn-primary">Simpan</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Batal</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

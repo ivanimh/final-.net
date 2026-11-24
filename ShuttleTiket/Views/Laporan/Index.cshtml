@@ -1,0 +1,44 @@
+@model List<VwRekapPenjualanRute>
+@{
+    ViewData["Title"] = "Laporan Penjualan";
+    var totalTiket = Model.Sum(r => r.TiketTerjual);
+    var totalPendapatan = Model.Sum(r => r.TotalPendapatan);
+}
+
+<div class="page-head">
+    <div>
+        <h1>Laporan penjualan per rute</h1>
+        <p>@totalTiket tiket terjual &middot; pendapatan @Format.Rupiah(totalPendapatan). Hanya pemesanan berstatus LUNAS.</p>
+    </div>
+    <button onclick="window.print()" class="btn btn-sm btn-outline-secondary no-print">Cetak</button>
+</div>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Rute</th><th class="num">Jadwal</th><th class="num">Transaksi lunas</th>
+                <th class="num">Tiket terjual</th><th class="num">Pendapatan</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.KotaAsal &rarr; @r.KotaTujuan</td>
+                    <td class="num">@r.JumlahJadwal</td>
+                    <td class="num">@r.JumlahTransaksi</td>
+                    <td class="num">@r.TiketTerjual</td>
+                    <td class="num">@Format.Rupiah(r.TotalPendapatan)</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">Total</td>
+                <td class="num">@totalTiket</td>
+                <td class="num">@Format.Rupiah(totalPendapatan)</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

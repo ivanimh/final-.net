@@ -1,0 +1,59 @@
+@model Jadwal
+@{ var isEdit = Model.Id > 0; }
+
+<div class="narrow">
+    <div class="page-head"><h1>@ViewData["Title"]</h1></div>
+
+    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="RuteId" class="form-label"></label>
+            <select asp-for="RuteId" asp-items="ViewBag.RuteList" class="form-select">
+                <option value="0">Pilih rute</option>
+            </select>
+            <span asp-validation-for="RuteId" class="text-danger small"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ArmadaId" class="form-label"></label>
+            <select asp-for="ArmadaId" asp-items="ViewBag.ArmadaList" class="form-select">
+                <option value="0">Pilih armada</option>
+            </select>
+            <span asp-validation-for="ArmadaId" class="text-danger small"></span>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 mb-3">
+                <label asp-for="Tanggal" class="form-label"></label>
+                <input asp-for="Tanggal" type="date" class="form-control" />
+                <span asp-validation-for="Tanggal" class="text-danger small"></span>
+            </div>
+            <div class="col-sm-6 mb-3">
+                <label asp-for="JamBerangkat" class="form-label"></label>
+                <input asp-for="JamBerangkat" type="time" value="@Format.Jam(Model.JamBerangkat)" class="form-control" />
+                <span asp-validation-for="JamBerangkat" class="text-danger small"></span>
+            </div>
+        </div>
+        @if (isEdit)
+        {
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label"></label>
+                <select asp-for="Status" class="form-select">
+                    <option value="AKTIF">AKTIF</option>
+                    <option value="BATAL">BATAL</option>
+                </select>
+            </div>
+        }
+        else
+        {
+            <input type="hidden" asp-for="Status" />
+        }
+
+        <div class="d-flex gap-2 mt-2">
+            <button type="submit" class="btn btn-primary">Simpan</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Batal</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,82 @@
+﻿@* FILE BERSAMA: dibuat saat setup awal. Semua menu sudah disiapkan di sini
+   supaya Anggota 1 & 2 tidak perlu mengedit layout lagi (hindari conflict). *@
+@{
+    // Menandai menu yang sedang dibuka (garis bawah)
+    var ctrl = ViewContext.RouteData.Values["controller"] as string;
+    var act = ViewContext.RouteData.Values["action"] as string;
+    string Aktif(string c) => ctrl == c ? "active" : "";
+    string AktifJika(bool kondisi) => kondisi ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ShuttleKu</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="site-header mb-4">
+        <nav class="navbar navbar-expand-md">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">ShuttleKu</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuUtama"
+                        aria-controls="menuUtama" aria-expanded="false" aria-label="Buka menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="menuUtama">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link @AktifJika(ctrl == "Pencarian" || (ctrl == "Pemesanan" && act == "Pesan"))" asp-controller="Pencarian" asp-action="Index">Cari jadwal</a></li>
+                        <li class="nav-item"><a class="nav-link @AktifJika(ctrl == "Pemesanan" && act is "Cek" or "Detail" or "ETiket")" asp-controller="Pemesanan" asp-action="Cek">Cek booking</a></li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            @* Menu admin hanya muncul setelah login *@
+                            <li class="nav-label d-none d-md-block">Admin</li>
+                            <li class="nav-item"><a class="nav-link @Aktif("Armada")" asp-controller="Armada" asp-action="Index">Armada</a></li>
+                            <li class="nav-item"><a class="nav-link @Aktif("Rute")" asp-controller="Rute" asp-action="Index">Rute</a></li>
+                            <li class="nav-item"><a class="nav-link @Aktif("Jadwal")" asp-controller="Jadwal" asp-action="Index">Jadwal</a></li>
+                            <li class="nav-item"><a class="nav-link @AktifJika(ctrl == "Pemesanan" && act == "Index")" asp-controller="Pemesanan" asp-action="Index">Pemesanan</a></li>
+                            <li class="nav-item"><a class="nav-link @Aktif("Laporan")" asp-controller="Laporan" asp-action="Index">Laporan</a></li>
+                            <li class="nav-item">
+                                <form asp-controller="Akun" asp-action="Logout" method="post">
+                                    <button type="submit" class="nav-link" title="Masuk sebagai @User.Identity.Name">Keluar</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item"><a class="nav-link @Aktif("Akun")" asp-controller="Akun" asp-action="Login">Masuk admin</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-4">
+            @if (TempData["Sukses"] is string sukses)
+            {
+                <div class="alert alert-success no-print" role="status">@sukses</div>
+            }
+            @if (TempData["Error"] is string error)
+            {
+                <div class="alert alert-danger no-print" role="alert">@error</div>
+            }
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container">ShuttleKu &middot; Sistem Pemesanan Tiket Shuttle Antarkota</div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
