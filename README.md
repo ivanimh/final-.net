@@ -46,14 +46,10 @@ Script SQL ada di folder `database/`. Ada 3 SQL View yang dipakai di aplikasi:
 4. Cek connection string di `appsettings.json` (default: user `root`, tanpa password).
 5. Tekan F5.
 
-Catatan: tanggal jadwal di data dummy dihitung dari hari script di-import (berlaku 7 hari). Kalau jadwalnya sudah lewat, import ulang aja script-nya.
-
 ## Akun Admin
 
 - Username: `admin`
 - Password: `admin123`
-
-Contoh kode booking buat dicoba: `SHTA1B2C3D4` (lunas) dan `SHTN4P5Q6R7` (belum bayar).
 
 ## Pembagian Tugas
 
