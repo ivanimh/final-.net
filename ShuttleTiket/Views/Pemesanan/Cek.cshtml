@@ -1,0 +1,23 @@
+@* cek booking berdasarkan kode *@
+@{ ViewData["Title"] = "Cek Booking"; }
+
+<div class="narrow" style="max-width: 420px">
+    <div class="page-head">
+        <div>
+            <h1>Cek booking</h1>
+            <p>Masukkan kode booking yang Anda terima saat memesan.</p>
+        </div>
+    </div>
+
+    @if (ViewBag.Pesan != null)
+    {
+        <div class="alert alert-warning">@ViewBag.Pesan</div>
+    }
+
+    <form method="get">
+        <label for="kode" class="form-label">Kode booking</label>
+        <input id="kode" name="kode" value="@ViewBag.Kode" class="form-control code text-uppercase mb-3"
+               placeholder="SHTXXXXXXXX" autocomplete="off" required />
+        <button class="btn btn-primary">Cari</button>
+    </form>
+</div>

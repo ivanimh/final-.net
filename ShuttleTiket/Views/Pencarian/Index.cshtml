@@ -1,0 +1,58 @@
+@* hasil pencarian dari SQL VIEW vw_jadwal_shuttle *@
+@using ShuttleTiket.Models.ViewModels
+@model CariJadwalViewModel
+@{
+    ViewData["Title"] = "Cari Jadwal";
+    var namaRute = (Model.Asal, Model.Tujuan) switch
+    {
+        (not null and not "", not null and not "") => $"{Model.Asal} → {Model.Tujuan}",
+        (not null and not "", _) => $"dari {Model.Asal}",
+        (_, not null and not "") => $"ke {Model.Tujuan}",
+        _ => "semua rute"
+    };
+}
+
+<div class="page-head">
+    <h1>Cari jadwal</h1>
+</div>
+
+<div class="panel panel-soft mb-4">
+    <partial name="_FormCari" model="Model" />
+</div>
+
+@if (Model.SudahCari)
+{
+    <p class="muted mb-2">@Model.Hasil.Count jadwal &middot; @namaRute &middot; @Format.Tanggal(Model.Tanggal)</p>
+
+    @if (Model.Hasil.Any())
+    {
+        <partial name="_TabelJadwal" model="new TabelJadwalModel(Model.Hasil, false)" />
+    }
+    else
+    {
+        <p>Tidak ada jadwal yang masih bisa dipesan pada tanggal ini.</p>
+
+        @if (Model.JadwalLain.Any())
+        {
+            <h2>Jadwal terdekat untuk @namaRute</h2>
+            <partial name="_TabelJadwal" model="new TabelJadwalModel(Model.JadwalLain, true)" />
+        }
+        else
+        {
+            <p class="muted">Belum ada jadwal untuk @namaRute dalam 30 hari ke depan.</p>
+        }
+    }
+}
+else
+{
+    <h2 class="mt-0">Jadwal 3 hari ke depan</h2>
+    @if (!Model.JadwalLain.Any())
+    {
+        <p class="muted">Belum ada jadwal.</p>
+    }
+    @foreach (var hari in Model.JadwalLain.GroupBy(j => j.Tanggal))
+    {
+        <p class="fw-semibold mt-4 mb-1">@Format.Tanggal(hari.Key)</p>
+        <partial name="_TabelJadwal" model="new TabelJadwalModel(hari.ToList(), false)" />
+    }
+}

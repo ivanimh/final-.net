@@ -1,0 +1,34 @@
+@* partial form cari jadwal (Beranda & halaman Pencarian) *@
+@using ShuttleTiket.Models.ViewModels
+@model CariJadwalViewModel
+
+<form asp-controller="Pencarian" asp-action="Index" method="get" class="row g-3 align-items-end">
+    <input type="hidden" name="SudahCari" value="true" />
+    <div class="col-sm-6 col-lg-3">
+        <label asp-for="Asal" class="form-label">Dari</label>
+        <select asp-for="Asal" class="form-select">
+            <option value="">Semua kota</option>
+            @foreach (var k in Model.DaftarKotaAsal)
+            {
+                <option value="@k" selected="@(k == Model.Asal)">@k</option>
+            }
+        </select>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <label asp-for="Tujuan" class="form-label">Ke</label>
+        <select asp-for="Tujuan" class="form-select">
+            <option value="">Semua kota</option>
+            @foreach (var k in Model.DaftarKotaTujuan)
+            {
+                <option value="@k" selected="@(k == Model.Tujuan)">@k</option>
+            }
+        </select>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <label asp-for="Tanggal" class="form-label">Tanggal</label>
+        <input asp-for="Tanggal" type="date" min="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+    <div class="col-sm-6 col-lg-3 d-grid">
+        <button type="submit" class="btn btn-primary">Cari</button>
+    </div>
+</form>

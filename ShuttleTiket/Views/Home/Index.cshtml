@@ -1,0 +1,56 @@
+﻿@* Beranda *@
+@using ShuttleTiket.Models.ViewModels
+@model CariJadwalViewModel
+@{ ViewData["Title"] = "Beranda"; }
+
+<div class="page-head">
+    <div>
+        <h1>Pesan tiket shuttle antarkota</h1>
+        <p>Pilih kota asal, tujuan, dan tanggal berangkat.</p>
+    </div>
+</div>
+
+<div class="panel panel-soft mb-4">
+    <partial name="~/Views/Pencarian/_FormCari.cshtml" model="Model" />
+</div>
+
+@if (Model.RuteTersedia.Any())
+{
+    <h2>Rute tersedia</h2>
+    <div class="table-responsive mb-4">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Rute</th>
+                    <th class="num">Harga</th>
+                    <th class="d-none d-sm-table-cell">Berangkat berikutnya</th>
+                    <th class="num d-none d-md-table-cell">Jadwal 7 hari</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model.RuteTersedia)
+                {
+                    <tr>
+                        <td class="text-nowrap">
+                            @r.KotaAsal &rarr; @r.KotaTujuan
+                            <span class="sub d-sm-none">@Format.TanggalPendek(r.BerangkatBerikutnya), @r.BerangkatBerikutnya.ToString("HH:mm")</span>
+                        </td>
+                        <td class="num">@Format.Rupiah(r.Harga)</td>
+                        <td class="d-none d-sm-table-cell">@Format.TanggalPendek(r.BerangkatBerikutnya), @r.BerangkatBerikutnya.ToString("HH:mm")</td>
+                        <td class="num d-none d-md-table-cell">@r.JumlahJadwal</td>
+                        <td class="text-end">
+                            <a asp-controller="Pencarian" asp-action="Index"
+                               asp-route-SudahCari="true" asp-route-Asal="@r.KotaAsal" asp-route-Tujuan="@r.KotaTujuan"
+                               asp-route-Tanggal="@r.BerangkatBerikutnya.ToString("yyyy-MM-dd")">Lihat jadwal</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<p class="muted">
+    Sudah memesan? <a asp-controller="Pemesanan" asp-action="Cek">Cek status booking</a> dengan kode booking Anda.
+</p>

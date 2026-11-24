@@ -1,0 +1,52 @@
+@* tabel daftar jadwal (hasil cari, jadwal terdekat, jadwal mendatang) *@
+@using ShuttleTiket.Models.ViewModels
+@model TabelJadwalModel
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Berangkat</th>
+                <th class="d-none d-md-table-cell">Rute</th>
+                <th class="d-none d-md-table-cell">Armada</th>
+                <th class="num d-none d-md-table-cell">Sisa kursi</th>
+                <th class="num">Harga</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var j in Model.Data)
+            {
+                var penuh = j.SisaKursi <= 0;
+                var sisa = penuh ? "Penuh" : j.SisaKursi.ToString();
+                <tr>
+                    <td>
+                        @if (Model.TampilkanTanggal)
+                        {
+                            <span class="sub text-nowrap">@Format.TanggalPendek(j.Tanggal)</span>
+                        }
+                        <span class="fw-semibold">@Format.Jam(j.JamBerangkat)</span>
+                        @* rute ditampilkan di bawah jam *@
+                        <span class="sub d-md-none text-nowrap">@j.KotaAsal &rarr; @j.KotaTujuan</span>
+                    </td>
+                    <td class="d-none d-md-table-cell">
+                        @j.KotaAsal &rarr; @j.KotaTujuan
+                        <span class="sub">± @(j.EstimasiMenit / 60) j @(j.EstimasiMenit % 60) m</span>
+                    </td>
+                    <td class="d-none d-md-table-cell">@j.NamaArmada<span class="sub">@j.PlatNomor</span></td>
+                    <td class="num d-none d-md-table-cell">@sisa</td>
+                    <td class="num">
+                        @Format.Rupiah(j.Harga)
+                        <span class="sub d-md-none">sisa @sisa</span>
+                    </td>
+                    <td class="text-end">
+                        @if (!penuh)
+                        {
+                            <a asp-controller="Pemesanan" asp-action="Pesan" asp-route-id="@j.JadwalId" class="btn btn-sm btn-primary">Pesan</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

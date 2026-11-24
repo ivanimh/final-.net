@@ -1,0 +1,66 @@
+@* daftar pemesanan (admin) dari SQL VIEW vw_detail_pemesanan *@
+@model List<VwDetailPemesanan>
+@{
+    ViewData["Title"] = "Daftar Pemesanan";
+    string? status = ViewBag.Status;
+}
+
+<div class="page-head">
+    <h1>Pemesanan</h1>
+    <form method="get" class="d-flex flex-wrap gap-2">
+        <input name="cari" value="@ViewBag.Cari" class="form-control form-control-sm" style="width: 180px" placeholder="Kode atau nama" aria-label="Cari" />
+        <select name="status" class="form-select form-select-sm" style="width: auto" aria-label="Status">
+            <option value="">Semua status</option>
+            <option value="MENUNGGU" selected="@(status == "MENUNGGU")">Menunggu</option>
+            <option value="LUNAS" selected="@(status == "LUNAS")">Lunas</option>
+            <option value="BATAL" selected="@(status == "BATAL")">Batal</option>
+        </select>
+        <button class="btn btn-sm btn-outline-secondary">Filter</button>
+    </form>
+</div>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Kode</th><th>Penumpang</th><th>Jadwal</th><th>Kursi</th>
+                <th class="num">Total</th><th>Status</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var p in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Detail" asp-route-kode="@p.KodeBooking" class="code">@p.KodeBooking</a>
+                        <span class="sub">@p.TanggalPesan.ToString("dd/MM/yy HH:mm")</span>
+                    </td>
+                    <td>@p.NamaPenumpang<span class="sub">@p.NoHp</span></td>
+                    <td class="text-nowrap">@p.NamaRute<span class="sub">@Format.TanggalPendek(p.Tanggal), @Format.Jam(p.JamBerangkat)</span></td>
+                    <td>@p.DaftarKursi</td>
+                    <td class="num">@Format.Rupiah(p.TotalHarga)</td>
+                    <td><span class="status status-@p.StatusPembayaran">@p.StatusPembayaran</span></td>
+                    <td class="actions">
+                        @if (p.StatusPembayaran == Pemesanan.StatusMenunggu)
+                        {
+                            <form asp-action="Konfirmasi" asp-route-id="@p.PemesananId" method="post">
+                                <button class="link-btn">Tandai lunas</button>
+                            </form>
+                        }
+                        @if (p.StatusPembayaran != Pemesanan.StatusBatal)
+                        {
+                            <form asp-action="Batalkan" asp-route-id="@p.PemesananId" method="post"
+                                  onsubmit="return confirm('Batalkan pemesanan ini? Kursinya akan dibuka kembali.')">
+                                <button class="link-btn link-danger">Batalkan</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+            @if (!Model.Any())
+            {
+                <tr><td colspan="7" class="muted py-4">Belum ada pemesanan.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

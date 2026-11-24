@@ -1,0 +1,94 @@
+@* form pemesanan + pilih kursi *@
+@using ShuttleTiket.Models.ViewModels
+@model PesanTiketViewModel
+@{
+    ViewData["Title"] = "Pesan Tiket";
+    var j = Model.Jadwal!;
+}
+
+<div class="page-head">
+    <div>
+        <h1>@j.KotaAsal &rarr; @j.KotaTujuan</h1>
+        <p>@Format.Tanggal(j.Tanggal), berangkat @Format.Jam(j.JamBerangkat) &middot; @j.NamaArmada (@j.PlatNomor)</p>
+    </div>
+</div>
+
+<form asp-action="Pesan" method="post">
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            <input type="hidden" asp-for="JadwalId" />
+
+            <h2 class="mt-0">Data penumpang</h2>
+            <div class="mb-3">
+                <label asp-for="NamaPenumpang" class="form-label"></label>
+                <input asp-for="NamaPenumpang" class="form-control" autocomplete="name" />
+                <span asp-validation-for="NamaPenumpang" class="text-danger small"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NoHp" class="form-label"></label>
+                    <input asp-for="NoHp" class="form-control" placeholder="081234567890" autocomplete="tel" />
+                    <span asp-validation-for="NoHp" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" autocomplete="email" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <h2>Pilih kursi <span class="muted fw-normal">(maks. 5)</span></h2>
+            <div class="legend">
+                <span>Kosong</span><span class="l-pilih">Dipilih</span><span class="l-isi">Terisi</span>
+            </div>
+            <span asp-validation-for="KursiDipilih" class="text-danger small d-block mb-2"></span>
+            <p class="small muted mb-2">Depan (sopir)</p>
+            <div class="kursi-grid mb-3">
+                @for (var no = 1; no <= j.Kapasitas; no++)
+                {
+                    var terisi = Model.KursiTerisi.Contains(no);
+                    var dipilih = Model.KursiDipilih.Contains(no);
+                    <div>
+                        <input type="checkbox" name="KursiDipilih" value="@no" id="kursi@(no)"
+                               class="cek-kursi" disabled="@terisi" checked="@(dipilih && !terisi)" />
+                        <label for="kursi@(no)" title="Kursi @no">@no</label>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="panel panel-soft">
+                <dl class="info mb-3" style="grid-template-columns: 1fr auto">
+                    <dt>Harga per kursi</dt><dd class="num">@Format.Rupiah(j.Harga)</dd>
+                    <dt>Kursi</dt><dd class="num" id="daftarKursi">-</dd>
+                    <dt class="text-body fw-semibold">Total</dt><dd class="num fw-semibold" id="totalHarga">Rp 0</dd>
+                </dl>
+                <button type="submit" class="btn btn-primary w-100">Pesan</button>
+                <a asp-controller="Pencarian" asp-action="Index" class="d-block text-center small mt-2">Kembali ke pencarian</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const harga = @j.Harga.ToString("0");
+        const maks = 5;
+        function hitung() {
+            const dipilih = [...document.querySelectorAll('.cek-kursi:checked')].map(c => c.value);
+            document.getElementById('daftarKursi').textContent = dipilih.length ? dipilih.join(', ') : '-';
+            document.getElementById('totalHarga').textContent = 'Rp ' + (dipilih.length * harga).toLocaleString('id-ID');
+        }
+        document.querySelectorAll('.cek-kursi').forEach(cb => cb.addEventListener('change', e => {
+            if (document.querySelectorAll('.cek-kursi:checked').length > maks) {
+                e.target.checked = false;
+                alert('Maksimal ' + maks + ' kursi per pemesanan.');
+            }
+            hitung();
+        }));
+        hitung();
+    </script>
+}

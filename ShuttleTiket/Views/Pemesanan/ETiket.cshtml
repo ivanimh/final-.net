@@ -1,0 +1,34 @@
+@* e-ticket siap cetak (data dari SQL VIEW vw_detail_pemesanan) *@
+@model VwDetailPemesanan
+@{ ViewData["Title"] = "E-Ticket " + Model.KodeBooking; }
+
+<div class="d-flex gap-3 align-items-center mb-3 no-print">
+    <a asp-action="Detail" asp-route-kode="@Model.KodeBooking">&larr; Kembali</a>
+    <button onclick="window.print()" class="btn btn-sm btn-outline-secondary ms-auto">Cetak / simpan PDF</button>
+</div>
+
+<div class="ticket">
+    <div class="ticket-head">
+        <div>
+            <div class="fw-semibold">ShuttleKu</div>
+            <div class="small muted">E-ticket</div>
+        </div>
+        <div class="text-end">
+            <div class="small muted">Kode booking</div>
+            <div class="code fs-4 fw-semibold">@Model.KodeBooking</div>
+        </div>
+    </div>
+    <div class="ticket-body">
+        <div class="ticket-route">@Model.KotaAsal &rarr; @Model.KotaTujuan</div>
+        <dl class="info">
+            <dt>Penumpang</dt><dd>@Model.NamaPenumpang</dd>
+            <dt>No. HP</dt><dd>@Model.NoHp</dd>
+            <dt>Tanggal</dt><dd>@Format.Tanggal(Model.Tanggal)</dd>
+            <dt>Jam berangkat</dt><dd class="fw-semibold">@Format.Jam(Model.JamBerangkat) WIB</dd>
+            <dt>Armada</dt><dd>@Model.NamaArmada (@Model.PlatNomor)</dd>
+            <dt>Nomor kursi</dt><dd class="fw-semibold">@Model.DaftarKursi</dd>
+            <dt>Pembayaran</dt><dd>@Format.Rupiah(Model.TotalHarga), lunas via @Model.MetodePembayaran</dd>
+        </dl>
+        <p class="small muted mt-4 mb-0">Datang ke pool 30 menit sebelum berangkat dan tunjukkan e-ticket ini kepada petugas.</p>
+    </div>
+</div>
