@@ -6,8 +6,8 @@ Aplikasi web sederhana untuk pesan tiket shuttle antarkota. Penumpang bisa cari 
 
 ## Anggota Kelompok
 
-1. Ivan Miracle Halim - 2481051 (bagian admin / data master)
-2. Sky Bradley Pantouw - 2481018 (bagian pemesanan / penumpang)
+1. Ivan Miracle Halim - 2481051 
+2. Sky Bradley Pantouw - 2481018 
 
 ## Tools yang dipakai
 
